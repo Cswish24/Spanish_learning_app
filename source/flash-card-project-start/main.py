@@ -30,8 +30,20 @@ Bootstrap(app)
 
 
 @app.route('/')
-def get_all_posts():
+def home():
     return render_template("index.html")
+
+@app.route('/add_words')
+def add_words():
+    return render_template("add_words.html")
+
+@app.route('/database')
+def database():
+    return render_template("database.html")
+
+@app.route('/quiz_home')
+def quiz_home():
+    return render_template("quiz_home.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
