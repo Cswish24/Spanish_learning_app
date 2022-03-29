@@ -7,5 +7,29 @@
 <div class="clearfix">
           <a class="btn btn-primary float-left" href="{{url_for('home')}}">return home</a>
 </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4 base_eng_list">
+<ul> English words</ul>
+
+    <ul>
+    {% for word in words %}
+      <ul>{{ word.English_word }}</ul>
+    {% endfor %}
+    </ul>
+</div>
+
+        <div class="col-lg-4 base_sp_list">
+
+<ul> Spanish words</ul>
+    <ul>
+    {% for word in words %}
+        <ul>{{ word.Spanish_word }}</ul>
+    {% endfor %}
+    </ul>
+
+</div>
+          </div>
+        </div>
 
 {% include "footer.html" %}

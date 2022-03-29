@@ -1,23 +1,27 @@
 from dotenv import load_dotenv
 import os
-import json
 from ibm_watson import LanguageTranslatorV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-load_dotenv()
-apikey = os.getenv("apikey")
-url = os.getenv("url")
 
-authenticator = IAMAuthenticator(apikey)
-language_translator = LanguageTranslatorV3(
-    version='2018-05-01',
-    authenticator=authenticator
-)
+def translate(word):
+    load_dotenv()
+    apikey = os.getenv("apikey")
+    url = os.getenv("url")
 
-language_translator.set_service_url(url)
+    authenticator = IAMAuthenticator(apikey)
+    language_translator = LanguageTranslatorV3(
+        version='2018-05-01',
+        authenticator=authenticator
+    )
 
-translation = language_translator.translate(
-    text='Do you know the milk man?',
-    model_id='en-es').get_result()
+    language_translator.set_service_url(url)
 
-print(json.dumps(translation, indent=2, ensure_ascii=False))
+    translation = language_translator.translate(
+        text=word,
+        model_id='en-es').get_result()
+    translation = translation["translations"][0]["translation"]
+    return translation
+
+
+
