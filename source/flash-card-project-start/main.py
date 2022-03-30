@@ -64,6 +64,13 @@ def database():
 def quiz_home():
     return render_template("quiz_home.html")
 
+@app.route("/delete/<int:word_id>")
+def delete_word(word_id):
+    word_to_delete = Word_DB.query.get(word_id)
+    db.session.delete(word_to_delete)
+    db.session.commit()
+    return redirect(url_for('database'))
+
 if __name__ == "__main__":
     app.run(debug=True)
 

@@ -24,4 +24,3 @@ def translate(word):
     return translation
 
 
-
