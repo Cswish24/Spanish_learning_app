@@ -20,6 +20,14 @@
 {% endwith %}
 <br>
 
+<ul>{{word.English_word}} {{word.Spanish_word}}
+    <a href="{{url_for('delete_word', word_id=word.id) }}">✘
+        </a>
+</ul>
+
+<br>
         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+
+
 
 {% include "footer.html" %}

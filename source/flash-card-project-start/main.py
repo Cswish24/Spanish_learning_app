@@ -42,6 +42,7 @@ def home():
 @app.route('/add_words', methods=['POST', 'GET'])
 def add_words():
     form = Word_form()
+    word = db.session.query(Word_DB).order_by(Word_DB.id.desc()).first()
     if form.validate_on_submit():
         new_word = Word_DB(
             English_word=form.word.data,
@@ -49,9 +50,10 @@ def add_words():
         )
         db.session.add(new_word)
         db.session.commit()
+        print(add_list)
         flash("Word Added! \nwould you like to add another word?")
         return redirect(url_for('add_words'))
-    return render_template("add_words.html", form=form)
+    return render_template("add_words.html", word=word, form=form)
 
 @app.route('/database')
 def database():
