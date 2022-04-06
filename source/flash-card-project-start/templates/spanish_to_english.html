@@ -1,7 +1,7 @@
 {% include "header.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-<h1>Add words here</h1>
+<h1>Translate Spanish word to English</h1>
 
 
 <br>
@@ -21,12 +21,13 @@
 <br>
 
 <ul>{{word.English_word}} {{word.Spanish_word}}
-    <a href="{{url_for('check', word_id=word.id) }}">✘
+    <a href="{{url_for('check_sp', word_id=word.id) }}">✘
         </a>
 </ul>
 
 <br>
         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+
 
 
 

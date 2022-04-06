@@ -8,7 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
-from api_test import translate
+from api_test import translate_en, translate_es
 from dotenv import load_dotenv
 
 class Word_form(FlaskForm):
@@ -40,21 +40,37 @@ class Word_DB(db.Model):
 def home():
     return render_template("index.html")
 
-@app.route('/add_words', methods=['POST', 'GET'])
-def add_words():
+@app.route('/english_to_spanish', methods=['POST', 'GET'])
+def english_to_spanish():
     form = Word_form()
+
     word = db.session.query(Word_DB).order_by(Word_DB.id.desc()).first()
     if form.validate_on_submit():
         new_word = Word_DB(
             English_word=form.word.data,
-            Spanish_word=translate(form.word.data)
+            Spanish_word=translate_en(form.word.data)
+        )
+        db.session.add(new_word)
+        db.session.commit()
+        flash("Word Added! \nwould you like to add another word?")
+        return redirect(url_for('english_to_spanish'))
+    return render_template("english_to_spanish.html", word=word, form=form)
+
+@app.route('/spanish_to_english', methods=['POST', 'GET'])
+def spanish_to_english():
+    form = Word_form()
+    word = db.session.query(Word_DB).order_by(Word_DB.id.desc()).first()
+    if form.validate_on_submit():
+        new_word = Word_DB(
+            Spanish_word=form.word.data,
+            English_word=translate_es(form.word.data)
         )
         db.session.add(new_word)
         db.session.commit()
 
         flash("Word Added! \nwould you like to add another word?")
-        return redirect(url_for('add_words'))
-    return render_template("add_words.html", word=word, form=form)
+        return redirect(url_for('spanish_to_english'))
+    return render_template("spanish_to_english.html", word=word, form=form)
 
 @app.route('/database')
 def database():
@@ -133,12 +149,19 @@ def delete_word(word_id):
     db.session.commit()
     return redirect(url_for('database'))
 
-@app.route("/check/<int:word_id>")
-def check(word_id):
+@app.route("/check_eng/<int:word_id>")
+def check_eng(word_id):
     word_to_delete = Word_DB.query.get(word_id)
     db.session.delete(word_to_delete)
     db.session.commit()
-    return redirect(url_for('add_words'))
+    return redirect(url_for('english_to_spanish'))
+
+@app.route("/check_sp/<int:word_id>")
+def check_sp(word_id):
+    word_to_delete = Word_DB.query.get(word_id)
+    db.session.delete(word_to_delete)
+    db.session.commit()
+    return redirect(url_for('spanish_to_english'))
 
 if __name__ == "__main__":
     app.run(debug=True)
